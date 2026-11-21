@@ -1,0 +1,22 @@
+services:
+  fusion-history-mt5:
+    build:
+      context: .
+      dockerfile: infra/fusion-history-mt5/Dockerfile
+    image: gold-lotus-fusion-history-mt5:local
+    container_name: gold-lotus-fusion-history-mt5
+    restart: unless-stopped
+    user: "${LOCAL_UID:-1001}:${LOCAL_GID:-1001}"
+    environment:
+      DISPLAY_ID: ":99"
+      DOWNLOAD_DIR: /data/downloads
+      HOME_DIR: /data/home
+      LOG_DIR: /data/logs
+      NOVNC_PORT: "6080"
+      RFB_PORT: "5900"
+      WINEPREFIX: /data/mt5-prefix
+    ports:
+      - "127.0.0.1:6081:6080"
+    volumes:
+      - /home/ai-agent/lotus-runtime/operations/fusion-history-mt5:/data
+      - ../1lotus/mt5:/opt/1lotus/mt5:ro

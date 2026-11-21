@@ -1,0 +1,75 @@
+# Local configuration and credentials. Keep example files versioned.
+.env
+.env.*
+!.env.example
+!**/.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.kdbx
+credentials.json
+service-account*.json
+
+# Python, tooling and editor state.
+.tools-venv/
+**/.venv/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.DS_Store
+.idea/
+.vscode/
+
+# Build outputs and generated documentation.
+build/
+dist/
+package/
+coverage/
+.vercel/
+apps/unified-ui/site/
+services/4lotus/var/
+
+# Local runtime, account data, databases and logs.
+**/.runtime/
+**/.runtime
+services/3lotus/data
+services/3lotus/logs
+**/logs/
+*.log
+*.log.*
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.jsonl
+
+# Market data and reproducible research outputs.
+*.bi5
+*.parquet
+*.feather
+*.arrow
+*.ready.csv
+*.part
+*.part.*
+services/5lotus/python-service/data/research/**/*.csv
+services/5lotus/python-service/data/research/**/trades.json
+services/5lotus/python-service/data/research/**/analise-interativa.html
+services/5lotus/market-data-pipeline/data/
+services/5lotus/.artifacts/
+services/5lotus/wine-prefix/
+
+# Local graph and Supabase CLI outputs.
+**/graphify-out/
+services/5lotus/supabase/.temp/

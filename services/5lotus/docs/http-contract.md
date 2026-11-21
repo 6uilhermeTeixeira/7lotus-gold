@@ -1,0 +1,234 @@
+# Contrato HTTP inicial
+
+## Objetivo
+
+Definir o contrato minimo entre o `Expert Advisor MQL5` e o `Python strategy service` para o setup inicial de `XAUUSD` em `M5`.
+
+Observacao:
+
+- o servico precisa de pelo menos `23` candles para validar o setup automatico
+- o arquivo real de exemplo esta em `python-service/sample-decision.json`
+
+## Endpoint de saude
+
+- `GET /health`
+
+Resposta:
+
+```json
+{
+  "status": "ok",
+  "service": "5lotus-research",
+  "timestamp_utc": "2026-07-18T01:00:00Z"
+}
+```
+
+## Endpoint de decisao
+
+- `POST /decision`
+
+Payload de referencia:
+
+```json
+{
+  "request_id": "sample-001",
+  "timestamp_utc": "2026-07-18T02:00:00Z",
+  "symbol": "XAUUSD",
+  "timeframe": "M5",
+  "bid": 3360.8,
+  "ask": 3361.0,
+  "spread_points": 2.0,
+  "point_size": 0.1,
+  "value_per_point_per_lot": 1.0,
+  "candles": [
+    { "timestamp_utc": "2026-07-18T02:15:00Z", "open": 3355.0, "high": 3358.6, "low": 3354.9, "close": 3358.3, "volume": 260 },
+    { "timestamp_utc": "2026-07-18T02:20:00Z", "open": 3358.3, "high": 3358.5, "low": 3354.9, "close": 3355.2, "volume": 120 },
+    { "timestamp_utc": "2026-07-18T02:25:00Z", "open": 3355.2, "high": 3361.2, "low": 3355.0, "close": 3360.9, "volume": 280 }
+  ],
+  "positions": [],
+  "account": {
+    "balance": 10000.0,
+    "equity": 10000.0,
+    "margin_free": 10000.0,
+    "leverage": 20
+  },
+  "indicators": {
+    "impulse_5s_ready": 1,
+    "impulse_5s_move_points": 18.5,
+    "impulse_5s_tick_count": 34,
+    "impulse_5s_tick_rate_per_second": 6.8,
+    "impulse_30s_ready": 1,
+    "impulse_30s_move_points": 104.2,
+    "impulse_30s_tick_count": 181,
+    "impulse_30s_tick_rate_per_second": 6.033333
+  }
+}
+```
+
+No exemplo acima a lista de `candles` foi truncada so para leitura. O arquivo de amostra no repositorio contem a serie completa usada no teste local.
+
+O EA calcula as métricas `impulse_{5,10,30,60}s_*` a partir de mids Bid/Ask mantidos em uma janela
+móvel com timestamps em milissegundos. `move_points` é assinado, positivo para alta e negativo para
+queda. `ready=0` significa que ainda não existe cobertura integral da janela; nesse estado movimento,
+contagem e taxa não podem ser usados como sinal. Todos os valores de `indicators` precisam ser
+finitos.
+
+Resposta minima:
+
+```json
+{
+  "action": "hold",
+  "reason": "live_decisions_disabled",
+  "size": 0.0,
+  "risk_amount": 500.0,
+  "entry_price": 3361.0,
+  "stop_loss_price": 3350.1785714285716,
+  "take_profit_price": 3377.2321428571427,
+  "stop_loss_points": 108.21,
+  "take_profit_points": 162.32,
+  "risk_checks": [
+    {
+      "name": "symbol_match",
+      "passed": true,
+      "detail": "symbol=XAUUSD expected=XAUUSD"
+    },
+    {
+      "name": "timeframe_match",
+      "passed": true,
+      "detail": "timeframe=M5 expected=M5"
+    },
+    {
+      "name": "spread_limit",
+      "passed": true,
+      "detail": "spread=2.0 max=3.0"
+    },
+    {
+      "name": "risk_per_trade_limit",
+      "passed": true,
+      "detail": "risk_pct=5.0"
+    }
+  ],
+  "metadata": {
+    "symbol": "XAUUSD",
+    "timeframe": "M5",
+    "strategy_profile": "price_action_breakout_pullback",
+    "suggested_action": "buy",
+    "suggested_size": 4.62,
+    "risk_per_trade_pct": 5.0,
+    "rr_ratio": 1.5,
+    "min_risk_reward": 1.5,
+    "stop_reference": "fractal_5_plus_atr14"
+  }
+}
+```
+
+## Catálogo de estratégias
+
+- `GET /api/bots` retorna somente estratégias ativas.
+- `GET /api/bots?archived=true` retorna `410`; estratégias aposentadas não fazem parte do catálogo.
+- `GET /api/bots/{bot_id}/results`, `/chart` e `/historical-replay` aceitam somente IDs ativos do catálogo.
+- O campo `active` explicita o estado operacional. O campo `name` contém apenas o título público; o identificador `bot-N` permanece no campo `id`.
+
+## Decisao atual
+
+O serviço trabalha com estes pressupostos:
+
+- ativos de pesquisa: `XAUUSD` e `EURUSD`
+- timeframe base: `M5`
+- perfis ativos: Bot 11 usa `portfolio_6_7_100_100`, Bot 16 usa `happy_gold_portfolio_100_100`, Bot 17 usa `happy_gold_tick_impulse_shadow`, Bot 18 usa `happy_gold_zigzag_tick_context_shadow` e Bot 19 usa `happy_gold_zigzag_structural_tick_shadow`; os demais ativos são Bots 6, 7, 12 e 13, todos em XAUUSD/M5
+- no Bot 7, `risk_amount`, `suggested_size` e `effective_risk_pct` já incorporam o multiplicador experimental de risco `0,5`; o alvo é `0,75R` e somente sinais de compra entre 13:00 e 15:59 UTC são candidatos
+- no Bot 8, esses campos incorporam a alocação do componente selecionado: `0,75` para o Bot 7 e `0,25` para o Bot 6; `portfolio_component`, `portfolio_weight_pct` e a prioridade aplicada são retornados em `metadata`
+- no Bot 9, `adaptive_component_health_json` registra a janela causal de 120 dias e `adaptive_active_component` permanece congelado durante o dia UTC; somente o componente selecionado recebe 100% do risco-base do candidato, sempre em shadow
+- nos Bots 10 e 11, `portfolio_risk_state_json` registra operações e resultado do dia, `portfolio_regime*` comprova o filtro vendedor do Bot 6 e `portfolio_weight_pct` retorna respectivamente 75/50 ou 100/100 conforme o componente
+- no Bot 12, `signal_timeframe=M30`, `fixed_stop_points=240`, `fixed_target_points=1000`, `suggested_size=0.10`, `break_even_trigger_points=40`, `trailing_activation_points=120` e `trailing_distance_points=60` documentam a assinatura reconstruída; `experimental_shadow_lock=true` impede execução
+- no Bot 13, `selective_regime_confirmation=true` preserva o Bot 12 em `range/trend`; `zigzag_close_confirmed` e `zigzag_direction_aligned` precisam ser verdadeiros em `transition/high_volatility`
+- no Bot 16, `combined_component`, `combined_priority` e os flags de candidato identificam a fonte selecionada; conflitos ficam em `hold`, `combined_daily_trade_cap=unlimited`, a sessão é 06:00–19:00 UTC e o risco total nunca ultrapassa 100% do risco-base
+- no Bot 17, `impulse_30s_move_points` é normalizado pelo `point_size` para pips XAUUSD de 0,01 e precisa atingir 95,5 pips absolutos; o lote sugerido é 0,10, SL/TP são 240/1.000 pips e `record_paper_trade=false` impede uma simulação M5 inadequada
+- no Bot 18, o rompimento causal ZigZag M30 precisa estar alinhado a `impulse_900s_move_points` normalizado de pelo menos 800 pips; o perfil permanece em shadow com `experimental_shadow_lock=true` porque o replay anual não confirmou rentabilidade
+- no Bot 19, o mesmo contexto de 900 segundos é combinado com distância direcional da EMA20, extensão máxima além do pivô e exclusão de sexta-feira; a telemetria sugere stop 60, breakeven 40/+1, trailing 40/20 e máximo 60 segundos; `record_paper_trade=false` e `experimental_shadow_lock=true` permanecem obrigatórios devido à amostra pequena
+- candidatos do Bot 19 abrem somente um registro em `tick_shadow_trades`; lotes autenticados em `POST /api/ticks` avançam a simulação por Bid/Ask e fazem backfill de ticks já ingeridos desde o sinal, sem qualquer integração com envio de ordens
+- risco máximo por operação: `1%` da banca
+- gatilho: pullback/rejeição da MME20 ou padrão fora-dentro
+- stop: estrutura da rejeição com buffer de ATR(14)
+- parcial de 50% em 1R, breakeven e alvo final em 2R
+- o servico pode calcular `suggested_size`
+- fluxo padrão `veto`: somente forte contradição simultânea de livro e ticks bloqueia
+- a decisão continua em `hold` enquanto shadow/live e a amostra mínima não forem liberados
+
+Quando existe candidato, `metadata` inclui:
+
+- `candidate`, `candle_timestamp_utc`, `suggested_action` e `setup_type`
+- `flow_status`, `flow_ready`, `flow_confirmed` e `flow_contradicted`
+- `book_z`, `tick_z` e `flow_score` quando a janela está aquecida
+- MME20, ATR(14), tamanho sugerido e política aplicada
+- no Momentum ATR, MME50 e nível de rompimento
+- no RSI Bollinger, RSI(14), banda superior, banda inferior e média de 20 períodos
+- no MACD Trend, linha MACD, linha de sinal, histograma e MME50
+- no Stochastic Pullback, %K, %D e MME50
+
+## Travas de execucao
+
+As travas abaixo são preservadas como defesa em profundidade:
+
+1. no servico Python:
+   `DAYTRADE_FIMATH_MODE=live`
+2. no servico Python:
+   `DAYTRADE_ENABLE_LIVE_DECISIONS=true`
+3. no paper trading:
+   amostra mínima encerrada no variant exigido pela política
+4. no EA:
+   `EnableOrderExecution=true`
+
+Na versão atual, os sete bots selecionados são chamados pelo EA com `allowExecution=false`. Portanto,
+alterar essas flags não habilita ordens e não existe caminho operacional suportado para execução real.
+
+## Fluxo de teste
+
+O roteiro operacional completo de teste em demo esta em:
+
+- `docs/demo-test-playbook.md`
+
+## Saúde e idempotência
+
+- `GET /health` é liveness e responde sem consultar dependências.
+- `GET /ready` valida a configuração e a conexão com o Supabase; retorna `503` quando indisponível.
+- `GET /api/metrics` exige sessão e retorna contadores e latências agregadas por etapa.
+- `request_id` é obrigatório em `/decision`; repetir o mesmo `bot_id + request_id` retorna a resposta
+  persistida sem repetir os efeitos da decisão concluída.
+
+## Ingestão de ticks
+
+- `POST /api/ticks` usa `X-2Lotus-Ingest-Key` e exige Supabase.
+- Cada lote contém `collector_id`, `symbol`, `point_size` e de 1 a 2.000 ticks.
+- Cada tick contém `time_msc`, `sequence`, Bid, Ask, Last, volume e flags do `MqlTick`.
+- O lote deve estar ordenado e não pode repetir `time_msc + sequence`.
+- Reenvios são idempotentes pela chave `collector_id + symbol + time_msc + sequence`.
+- O endpoint apenas persiste dados para pesquisa; não avalia estratégia nem envia ordens.
+
+## Replay histórico autenticado
+
+- `GET /api/bots/{bot_id}/historical-replay?days=120`
+- `days` aceita valores de `1` a `365`
+- requer a mesma sessão autenticada do portal
+- requer candles em `market_history` e `DAYTRADE_RESULTS_STORE=SUPABASE`
+
+O período termina no fechamento do candle mais recente disponível. A resposta inclui candles,
+operações simuladas, contagem de candidatos, resumo de performance, PnL diário e as premissas do
+cálculo. O replay não persiste registros e nunca aciona o endpoint de execução do MT5.
+
+Regras de simulação:
+
+- cada decisão recebe no máximo os 60 candles que estariam disponíveis naquele instante;
+- uma estratégia mantém no máximo uma posição simulada aberta por vez;
+- parcial em 1R move o stop do saldo para breakeven e o alvo final permanece em 2R;
+- quando o OHLC toca stop e alvo no mesmo candle, o stop vence;
+- entrada, spread, slippage e custos são aproximações configuráveis;
+- todos os bots XAUUSD/M5 reutilizam `market_history`, evitando coberturas diferentes para o mesmo mercado;
+- `GET /api/equity-comparison?symbol=XAUUSD&days=365` retorna uma curva acumulada por estratégia a partir de snapshots previamente calculados;
+- entradas fora da sessão configurada são bloqueadas e qualquer posição restante é fechada no fim do dia;
+- compras usam ask na entrada e bid na saída; vendas usam bid na entrada e ask na saída;
+- slippage e comissão são aplicados aos fills;
+- estratégias de tendência exigem H1 em tendência e lado alinhado; reversão à média exige regime de range;
+- a resposta inclui expectativa em R, drawdown em R, bloqueios, regimes e janelas temporais de validação;
+- menos de 90 dias resulta em `validation_status=insufficient_history`, mesmo que o PnL do mês seja positivo;
+- a estabilidade usa janelas de 30 dias por padrão, adequadas à frequência observada das estratégias.

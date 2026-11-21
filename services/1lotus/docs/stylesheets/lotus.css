@@ -1,0 +1,47 @@
+:root{color-scheme:dark;--bg:#07090d;--panel:#0f141c;--line:#283242;--text:#edf2f7;--muted:#8c9aae;--green:#43d398}
+.panel-menu{display:grid;gap:5px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--line)}.panel-menu a{display:block;min-height:40px;padding:10px 12px;border-radius:8px;color:var(--muted);font-size:13px;font-weight:650;text-decoration:none}.panel-menu a:hover,.panel-menu a[aria-current]{background:#18242b;color:var(--text)}
+html,body{background:var(--bg)!important;color:var(--text)!important;font-family:Inter,system-ui,sans-serif}body{padding:0 0 0 248px!important}
+/* Keep the project panels in the sidebar and the documentation links above the page. */
+.navbar.bg-primary{position:fixed;inset:0 auto 0 0;width:248px;height:100vh;min-height:0;padding:22px 16px;overflow-y:auto;align-items:flex-start;background:#0a0e14!important;border-right:1px solid var(--line);box-shadow:none}
+.navbar>.container{display:block;width:100%;max-width:none;margin:0;padding:0}
+.navbar-brand{display:flex;align-items:center;gap:9px;width:100%;margin:0;padding:6px 10px 24px;color:var(--text)!important;font-size:18px;font-weight:800;letter-spacing:.08em}
+.navbar-brand::before{content:'';flex:none;width:38px;height:38px;background:url('../assets/lotus-icon.png') center/contain no-repeat;filter:brightness(0) invert(1)}
+.navbar-brand::after{content:'WORKSPACE';color:var(--green);font-size:9px;letter-spacing:.08em}
+.panel-menu::before{content:'Painéis locais';display:block;padding:0 12px 7px;color:var(--muted);font-size:11px;font-weight:650;letter-spacing:.08em;text-transform:uppercase}
+.navbar-toggler{display:none}#navbar-collapse{display:block!important;width:100%}
+#navbar-collapse .ms-md-auto{display:none}
+body>.container{box-sizing:border-box;width:100%;max-width:1320px;min-width:0;margin:0 auto!important;padding:28px}body>.container>.row{display:block;min-width:0;margin:0}body>.container>.row>.col-md-3{display:none}body>.container>.row>.col-md-9{width:100%;max-width:none;min-width:0;padding:0}
+.documentation-nav{display:flex;align-items:center;gap:18px;min-width:0;margin:0 0 16px;padding:14px 20px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.documentation-nav>strong{flex:none;color:var(--text);font-size:14px}.documentation-nav .navbar-nav{display:flex;flex-direction:row;flex-wrap:wrap;gap:6px;margin:0;padding:0;min-width:0}
+.documentation-nav .nav-link{display:block;padding:9px 12px!important;border-radius:8px;color:var(--muted)!important;font-size:13px;font-weight:650;text-decoration:none;white-space:nowrap}.documentation-nav .nav-link:hover,.documentation-nav .nav-link.active{color:var(--text)!important;background:#18242b}
+.documentation-nav>[data-bs-target]{margin-left:auto;color:var(--muted);font-size:13px;text-decoration:none;white-space:nowrap}.documentation-nav>[data-bs-target]:hover{color:var(--text)}
+[role=main]{min-width:0;min-height:calc(100vh - 56px);padding:clamp(20px,3vw,42px)!important;line-height:1.7;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+[role=main] h1,[role=main] h2,[role=main] h3{color:var(--text);font-weight:700}[role=main] h1{padding-bottom:18px;margin-bottom:24px;border-bottom:1px solid var(--line);font-size:30px}
+[role=main] a{color:var(--green)}[role=main] p,[role=main] li{color:#c4ced9}[role=main] table,[role=main] th,[role=main] td{color:var(--text);border-color:var(--line)}[role=main] th,[role=main] td{padding:12px;background:transparent}
+[role=main] pre,[role=main] code{color:#c4efda;background:#090d13;border-color:var(--line)}[role=main] table{display:block;max-width:100%;overflow-x:auto}.modal-content{color:var(--text);background:var(--panel);border:1px solid var(--line)}footer{color:var(--muted)!important}footer a{color:var(--muted)!important}hr{border-color:var(--line)}
+@media(max-width:760px){body{padding:64px 0 0!important}.navbar.bg-primary{inset:0 0 auto 0;width:100%;height:auto;max-height:100vh;padding:10px 16px;overflow-y:auto;border-right:0;border-bottom:1px solid var(--line)}.navbar>.container{display:flex;align-items:center;flex-wrap:wrap;justify-content:space-between}.navbar-brand{width:auto;padding:0;font-size:17px}.navbar-brand::before{width:32px;height:32px}.navbar-toggler{display:block}#navbar-collapse{display:none!important;padding-top:12px}#navbar-collapse.show{display:block!important}body>.container{width:100%;margin:0;padding:16px}.documentation-nav{display:block;padding:14px}.documentation-nav .navbar-nav{flex-wrap:nowrap;overflow-x:auto;margin:10px 0}.documentation-nav>[data-bs-target]{display:inline-block;margin-top:4px}[role=main]{min-height:calc(100vh - 96px);padding:20px!important}}
+
+/* Shared navigation shell, matching the 1lotus dashboard. */
+body{padding:0 0 0 248px!important}
+.navbar.bg-primary{display:none!important}
+.app-sidebar{position:fixed;inset:0 auto 0 0;z-index:50;width:248px;display:flex;flex-direction:column;padding:24px 16px;overflow-y:auto;background:#0a0e14!important;border-right:1px solid #283242;box-shadow:none}
+.app-sidebar-brand{min-height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 10px}
+.app-sidebar-brand>a{display:flex;align-items:center;gap:11px;min-width:0;color:#f4f7fb;text-decoration:none;font-size:13px;font-weight:800;letter-spacing:.13em}
+.app-sidebar-brand img{display:block;width:38px;height:38px;object-fit:contain;filter:brightness(0) invert(1)}
+.app-sidebar-close,.app-menu-button{display:none}
+.app-workspace-label{display:grid;gap:0;margin:12px 0 14px;padding:14px 12px;border:0;border-top:1px solid #283242;border-radius:0;background:none}
+.app-workspace-label span{color:#8c9aae;font-size:11px;font-weight:650;letter-spacing:.08em;text-transform:uppercase}
+.app-workspace-label strong{margin-top:6px;color:#edf2f7;font-size:13px}
+.app-nav{display:grid;gap:5px}
+.app-nav-link{min-height:44px;display:flex;align-items:center;gap:11px;padding:0 12px;border:1px solid transparent;border-radius:8px;color:#929db0;font-size:13px;font-weight:650;text-decoration:none;transition:background .16s ease,color .16s ease}
+.app-nav-link:hover{color:#fff;background:rgba(255,255,255,.045)}
+.app-nav-link.active{color:#fff;border-color:transparent;background:#1b2634;box-shadow:inset 3px 0 0 #43d398}
+.app-nav-link svg,.app-menu-button svg{width:19px;height:19px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.app-topbar{position:sticky;top:0;z-index:30;height:64px;display:flex;align-items:center;gap:12px;margin:0;padding:0 26px;border-bottom:1px solid #202938;background:rgba(7,9,13,.94);backdrop-filter:blur(14px)}
+.app-topbar>div{display:flex;align-items:baseline;gap:8px}.app-topbar span{color:#677287;font-size:11px}.app-topbar strong{color:#dbe4f2;font-size:12px}
+.app-topbar-mode{margin-left:auto;padding:5px 8px;border:1px solid rgba(67,211,152,.3);border-radius:999px;color:#43d398!important;font-size:9px!important;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.app-sidebar-overlay{display:none}
+.documentation-nav{margin:0 0 16px;padding:14px 20px;border-radius:10px;background:#0d1118}
+.documentation-nav>strong{font-size:13px}.documentation-nav .nav-link{min-height:40px;padding:10px 12px!important}
+@media(max-width:860px){body{padding:0!important}.app-sidebar{width:min(280px,85vw);transform:translateX(-102%);transition:transform .2s ease}.app-sidebar-close{width:34px;height:34px;display:grid;place-items:center;border:1px solid #202938;border-radius:7px;color:#a9b4c5;background:transparent;font-size:20px}.app-sidebar-overlay{position:fixed;inset:0;z-index:40;display:block;pointer-events:none;opacity:0;background:rgba(0,0,0,.66);transition:opacity .2s ease}body.sidebar-open .app-sidebar{transform:translateX(0)}body.sidebar-open .app-sidebar-overlay{pointer-events:auto;opacity:1}.app-menu-button{width:36px;height:36px;display:grid;place-items:center;padding:0;border:1px solid #202938;border-radius:7px;color:#c5cedd;background:#0d1118}.app-topbar{height:60px;padding:0 14px}.body>.container{padding:16px}}
+@media(prefers-reduced-motion:reduce){.app-sidebar,.app-sidebar-overlay,.app-nav-link{transition:none}}

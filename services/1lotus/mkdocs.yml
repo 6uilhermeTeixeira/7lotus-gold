@@ -1,0 +1,17 @@
+site_name: 1lotus
+site_description: Arquitetura e operacao do ecossistema Lotus
+extra_css:
+  - stylesheets/lotus.css?v=3
+extra_javascript:
+  - javascripts/panels.js?v=2
+dev_addr: 127.0.0.1:7777
+docs_dir: docs
+strict: true
+nav:
+  - Início: index.md
+  - Arquitetura: architecture.md
+  - Repositórios: repositories.md
+  - Histórico Fusion M1/M5: fusion-candles.md
+  - Sistema visual: design-system.md
+  - Promoção: promotion.md
+  - Migração: migration-runbook.md

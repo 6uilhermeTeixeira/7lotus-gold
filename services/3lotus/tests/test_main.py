@@ -1,0 +1,61 @@
+from pathlib import Path
+
+import pytest
+from lotus_runner.config import Settings
+from lotus_runner.main import RunnerState, normalize_execution_report
+
+
+def test_runner_ingests_market_data_and_audits_decision(tmp_path: Path) -> None:
+    settings = Settings(
+        "127.0.0.1", 7772, Path(__file__).resolve().parents[1] / "strategies",
+        "zigzag-v7", "", False, 0, 0.01, market_db_path=tmp_path / "market.db",
+    )
+    state = RunnerState(settings)
+    response = state.process({
+        "request_id": "request-1",
+        "collector_id": "test-collector",
+        "bot_id": "zigzag-v7",
+        "timestamp_utc": "2026-01-05T12:00:00Z",
+        "symbol": "XAUUSD",
+        "timeframe": "M5",
+        "bid": 2000.0,
+        "ask": 2000.1,
+        "point_size": 0.01,
+        "ticks": [{"time_msc": 1_767_614_400_000, "sequence": 1, "bid": 2000.0, "ask": 2000.1}],
+        "order_book": [{"side": "bid", "price": 2000.0, "volume": 1}],
+        "candles": [{"timestamp_utc": "2026-01-05T11:55:00Z", "open": 2000, "high": 2001, "low": 1999, "close": 2000, "volume": 1}],
+        "account": {"login": 466305, "trade_mode": "demo"},
+    })
+    assert response["reason"] == "v7_warmup"
+    assert response["request_id"] == "request-1"
+    assert state.market.last_decision is not None
+    assert state.market.metrics()["ticks_received"] == 1
+
+
+def test_execution_report_is_audited(tmp_path: Path) -> None:
+    from lotus_runner.market import MarketStore
+
+    store = MarketStore(tmp_path / "market.db")
+    store.record_execution({"request_id": "request-1", "action": "buy", "sent": True, "retcode": 10009})
+    assert store.metrics()["executions_total"] == 1
+
+
+@pytest.mark.parametrize("field,value", [
+    ("open", None),
+    ("high", float("nan")),
+    ("low", 2002),
+    ("timestamp_utc", "invalid"),
+])
+def test_rejects_incomplete_candles(field: str, value: object) -> None:
+    candle = {"timestamp_utc": "2026-01-05T11:55:00Z", "open": 2000, "high": 2001, "low": 1999, "close": 2000}
+    candle[field] = value
+    with pytest.raises(ValueError, match="invalid candle history"):
+        RunnerState.validate_candles([candle])
+
+
+def test_execution_report_discards_unexpected_fields() -> None:
+    report = normalize_execution_report({
+        "request_id": "request-1", "action": "buy", "sent": True, "retcode": "10009",
+        "account": {"login": 123456}, "api_key": "should-not-be-logged",
+    })
+    assert report == {"request_id": "request-1", "action": "buy", "sent": True, "retcode": 10009}

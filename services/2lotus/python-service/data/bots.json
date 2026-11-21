@@ -1,0 +1,22 @@
+[
+  {
+    "id": "core-zigzag-v10",
+    "name": "ZigZag Scalper V4.0",
+    "description": "Roteador de Contexto que seleciona o filtro contextual de compra ou venda.",
+    "strategy_profile": "zigzag_scalper_v10_context_router_shadow",
+    "strategy_description": "- Compra: seleciona o filtro contextual V3.2.\n- Venda: seleciona o filtro contextual V3.1.\n- A V2.1 permanece como origem única do gatilho.\n- O ramo alternativo não é avaliado.\n- Execução permanentemente bloqueada em shadow.",
+    "symbol": "XAUUSD",
+    "timeframe": "M5",
+    "results_file": "backtests/core-zigzag-v10-365.json"
+  },
+  {
+    "id": "core-zigzag-v8",
+    "name": "ZigZag Scalper V5.1",
+    "description": "Filtro temporal de calendário mensal aplicado ao ramo ZigZag contextual.",
+    "strategy_profile": "zigzag_scalper_v8_accuracy_cycle_shadow",
+    "strategy_description": "- Aplica calendário seletivo de semanas e dias em UTC.\n- Mantém o sinal e o risco herdados do roteador temporal V6.0.\n- Estratégia experimental exclusivamente shadow.\n- Requer replay unificado e validação forward independente.",
+    "symbol": "XAUUSD",
+    "timeframe": "M5",
+    "results_file": "backtests/core-zigzag-v8-365.json"
+  }
+]

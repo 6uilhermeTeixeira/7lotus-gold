@@ -1,0 +1,9 @@
+/* The host owns navigation. Keep only the service's page content inside the frame. */
+html,body{min-width:0!important;margin:0!important;padding:0!important;overflow-x:hidden!important;background:#080b10!important}
+.app-sidebar,.sidebar,.app-topbar,.topbar,.app-sidebar-overlay,.overlay,.navbar.bg-primary,.menu-toggle{display:none!important}
+.app-shell,.shell{display:block!important;min-height:0!important;grid-template-columns:none!important}
+.app-workspace,.workspace{width:100%!important;min-width:0!important;margin:0!important}
+.app-content{padding:0!important}
+.app-content>main,.workspace>main,.shell main,body>.container{width:100%!important;max-width:none!important;margin:0!important;padding:24px!important}
+body>.container>.row{display:block!important}body>.container>.row>.col-md-9{width:100%!important;max-width:none!important}
+@media(max-width:600px){.app-content>main,.workspace>main,.shell main,body>.container{padding:16px!important}}

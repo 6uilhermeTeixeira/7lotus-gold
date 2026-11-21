@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Gold Lotus — prévia do sistema visual</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --lotus-bg: #07090d;
+      --lotus-sidebar: #0a0e14;
+      --lotus-surface: #0f141c;
+      --lotus-surface-raised: #151c26;
+      --lotus-border: #283242;
+      --lotus-text: #edf2f7;
+      --lotus-muted: #9ba9ba;
+      --lotus-accent: #43d398;
+      --lotus-accent-surface: #1b2634;
+      --lotus-warning: #f6c667;
+      --lotus-danger: #ff6b81;
+      --lotus-info: #64b5ff;
+      --lotus-space-1: 4px;
+      --lotus-space-2: 8px;
+      --lotus-space-3: 12px;
+      --lotus-space-4: 16px;
+      --lotus-space-6: 24px;
+      --lotus-space-8: 32px;
+      --lotus-radius-control: 6px;
+      --lotus-radius-card: 8px;
+      --lotus-radius-surface: 12px;
+      --lotus-font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-family: var(--lotus-font-family);
+      color: var(--lotus-text);
+      background: var(--lotus-bg);
+    }
+    * { box-sizing: border-box; }
+    body { min-width: 320px; margin: 0; font-size: 14px; }
+    :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+      outline: 2px solid var(--lotus-accent);
+      outline-offset: 2px;
+    }
+    .shell { min-height: 100vh; display: grid; grid-template-columns: 248px minmax(0, 1fr); }
+    aside { display: flex; flex-direction: column; padding: 24px 16px; background: var(--lotus-sidebar); border-right: 1px solid var(--lotus-border); }
+    .brand { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; font-size: 13px; font-weight: 800; letter-spacing: .13em; }
+    .brand-mark { display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid var(--lotus-border); border-radius: 50%; color: var(--lotus-accent); font-size: 11px; }
+    .workspace-label { margin: 20px 0 14px; padding: 14px 12px; border-top: 1px solid var(--lotus-border); color: var(--lotus-muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+    .workspace-label strong { display: block; margin-top: 6px; color: var(--lotus-text); font-size: 13px; letter-spacing: 0; text-transform: none; }
+    nav { display: grid; gap: 5px; }
+    nav a { display: flex; align-items: center; min-height: 44px; padding: 0 12px; border-radius: 8px; color: var(--lotus-muted); text-decoration: none; font-weight: 650; }
+    nav a[aria-current="page"] { background: var(--lotus-accent-surface); color: #fff; box-shadow: inset 3px 0 0 var(--lotus-accent); }
+    main { width: 100%; max-width: 1360px; margin: auto; padding: 24px; }
+    header { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin-bottom: 24px; }
+    .eyebrow { margin: 0 0 8px; color: var(--lotus-accent); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(24px, 3vw, 30px); letter-spacing: -.02em; text-wrap: balance; }
+    .muted { color: var(--lotus-muted); line-height: 1.5; }
+    .mode { padding: 6px 10px; border: 1px solid var(--lotus-border); border-radius: 999px; color: var(--lotus-muted); font-size: 11px; font-weight: 800; letter-spacing: .06em; }
+    .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .card, .panel { border: 1px solid var(--lotus-border); border-radius: var(--lotus-radius-card); background: var(--lotus-surface); }
+    .card { min-height: 112px; padding: 16px; }
+    .card span { display: block; color: var(--lotus-muted); font-size: 12px; }
+    .card strong { display: block; margin-top: 16px; font-size: 22px; font-variant-numeric: tabular-nums; }
+    .panel { overflow: hidden; }
+    .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--lotus-border); }
+    h2 { margin: 0; font-size: 16px; }
+    .badge { padding: 5px 8px; border-radius: 999px; background: var(--lotus-accent-surface); color: var(--lotus-accent); font-size: 11px; font-weight: 750; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; min-width: 560px; border-collapse: collapse; text-align: left; }
+    th, td { padding: 13px 20px; border-bottom: 1px solid var(--lotus-border); }
+    th { color: var(--lotus-muted); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    td:last-child { font-variant-numeric: tabular-nums; }
+    tr:last-child td { border-bottom: 0; }
+    .actions { display: flex; gap: 8px; margin-top: 18px; }
+    button { min-height: 40px; padding: 0 14px; border: 1px solid var(--lotus-border); border-radius: var(--lotus-radius-control); background: var(--lotus-surface-raised); color: var(--lotus-text); font: inherit; font-weight: 650; cursor: pointer; }
+    button.primary { border-color: var(--lotus-accent); background: var(--lotus-accent); color: #062218; }
+    @media (max-width: 860px) { .shell { display: block; } aside { padding: 14px 16px; border-right: 0; border-bottom: 1px solid var(--lotus-border); } .workspace-label { display: none; } nav { display: flex; overflow-x: auto; margin-top: 12px; } nav a { flex: 0 0 auto; } .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 560px) { main { padding: 20px 16px; } header { flex-direction: column; } .grid { grid-template-columns: 1fr 1fr; gap: 8px; } .card { min-height: 96px; padding: 12px; } .card strong { font-size: 19px; } .panel-heading { align-items: flex-start; flex-direction: column; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="brand"><span class="brand-mark">GL</span> GOLD LOTUS</div>
+      <div class="workspace-label">Prévia visual<strong>Componentes comuns</strong></div>
+      <nav aria-label="Exemplo de navegação">
+        <a href="#summary" aria-current="page">Visão geral</a>
+        <a href="#table">Dados e tabelas</a>
+      </nav>
+    </aside>
+    <main>
+      <header id="summary">
+        <div><p class="eyebrow">Sistema visual · exemplo</p><h1>Hierarquia clara para leitura operacional</h1><p class="muted">Prévia de cores, espaçamento, cartões, navegação e tabela. Os valores são demonstrativos.</p></div>
+        <span class="mode">EXEMPLO</span>
+      </header>
+      <section class="grid" aria-label="Exemplos de cartões de resumo">
+        <article class="card"><span>Estado do painel</span><strong>—</strong></article>
+        <article class="card"><span>Última atualização</span><strong>—</strong></article>
+        <article class="card"><span>Eventos observados</span><strong>—</strong></article>
+        <article class="card"><span>Estado de segurança</span><strong><span class="badge">EXEMPLO</span></strong></article>
+      </section>
+      <section class="panel" id="table" aria-labelledby="table-title">
+        <div class="panel-heading"><h2 id="table-title">Exemplo de tabela densa</h2><span class="muted">Rolagem horizontal em telas estreitas</span></div>
+        <div class="table-wrap"><table><thead><tr><th>Componente</th><th>Estado</th><th>Atualizado</th></tr></thead><tbody><tr><td>Fonte de dados</td><td><span class="badge">EXEMPLO</span></td><td>—</td></tr><tr><td>Painel de pesquisa</td><td><span class="badge">EXEMPLO</span></td><td>—</td></tr></tbody></table></div>
+      </section>
+      <div class="actions"><button class="primary" type="button">Ação principal</button><button type="button">Ação secundária</button></div>
+    </main>
+  </div>
+</body>
+</html>

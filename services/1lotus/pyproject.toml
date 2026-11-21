@@ -1,0 +1,8 @@
+[project]
+name = "1lotus-docs"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["mkdocs>=1.6,<2", "fastapi>=0.115,<0.140", "uvicorn>=0.30,<1", "duckdb>=1.4,<2"]
+
+[dependency-groups]
+dev = ["ruff>=0.12,<1", "httpx>=0.27,<1", "pytest>=9.0.3,<10"]
