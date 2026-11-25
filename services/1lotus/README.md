@@ -1,49 +1,40 @@
-# 1lotus
+# Interface unificada Gold Lotus
 
-Histórico de ticks XAUUSD e documentação do ecossistema Lotus.
+A interface local está em **http://127.0.0.1:7771/**. Histórico, Operation Core,
+Runner, Estratégias e Pesquisa continuam em `../2lotus` a `7lotus`, com dados e
+contratos preservados. Os serviços agora escutam em sockets Unix internos, sem
+abrir as antigas portas TCP. A documentação é uma cópia estática gerada pelo MkDocs.
 
-No workspace local atual, o histórico aparece na interface unificada em
-`http://127.0.0.1:7771/historico`. É uma aplicação de leitura
-independente: mostra o estado da coleta, a cobertura anual e amostras de candles
-e ticks dos releases publicados. Não participa do caminho de decisão ou execução.
+## Operação
 
-```bash
-cd services/1lotus
-uv sync
-LOTUS_DATA_ROOT=/caminho/do/lotus-data uv run uvicorn history_app:app --host 127.0.0.1 --port 7791
-```
-
-O armazenamento esperado contém `manifests/dukascopy.sqlite3` e
-`releases/CURRENT`, com partições Parquet versionadas. Sem esse diretório o painel
-mostra o diagnóstico de ausência, sem inventar dados. A coleta e a publicação
-continuam no pipeline do `5lotus/market-data-pipeline`; o painel não grava no dataset.
-
-## Candles Fusion Markets
-
-O exportador independente [mt5/FusionCandleHistoryExporter.mq5](mt5/FusionCandleHistoryExporter.mq5)
-consulta somente candles M5 fechados via `CopyRates` no terminal MT5 conectado à
-Fusion. Compile no MetaEditor e execute no gráfico do símbolo XAUUSD da conta
-Fusion. O símbolo pode ter sufixo: ajuste `CaptureSymbol` e registre o nome exato
-na importação. O terminal precisa estar sincronizado; a quantidade exportável
-depende do histórico disponibilizado pela corretora e do limite de barras do MT5.
-
-O CSV concluído fica em `Terminal/Common/Files/1lotus-candles/fusion/` com nome
-`<símbolo>-M5-candles.ready.csv`. Copie-o para este host e importe:
+O usuário `systemd --user` inicia `gold-lotus.target`, que agrupa
+`lotus-local-1.service` a `lotus-local-7.service`.
+O antigo `lotus-local-docs.service` foi desligado.
+Os modelos de unidade e overrides sem credenciais ficam em [`deploy/systemd/`](deploy/systemd/README.md).
 
 ```bash
-LOTUS_DATA_ROOT=/caminho/do/lotus-data uv run python scripts/import_fusion_candles.py \
-  /caminho/XAUUSD-M5-candles.ready.csv --server FusionMarkets-Demo --symbol XAUUSD
+systemctl --user status lotus-local-1.service
+systemctl --user restart lotus-local-1.service
 ```
 
-A importação valida OHLC, ordenação e formato, publica um Parquet versionado e
-atualiza `fusion-candles/releases/CURRENT`. A página Fusion da interface unificada lê esse
-release. Os horários são **horários do servidor da corretora**, sem conversão
-implícita para UTC; o exportador e o importador não usam a conta para negociar.
-
-A documentação local é servida em `127.0.0.1:7771/documentacao`. Para prévia
-isolada durante edição, use:
+Para atualizar a documentação estática após editar `services/7lotus/docs/`:
 
 ```bash
-uv sync
-uv run mkdocs serve --dev-addr 127.0.0.1:7797
+cd /home/ai-agent/projects/7lotus-gold/services/7lotus
+./.venv/bin/python -m mkdocs build -d ../1lotus/site --clean
 ```
+
+As telas e APIs internas têm prefixo `/p/history/`, `/p/operations/`,
+`/p/runner/`, `/p/strategies/`, `/p/promoted/` e `/p/research/`. Clientes externos que antes
+usavam 7772 ou 7773 precisam usar a rota correspondente em 7771. Para o bridge
+MT5 do Runner, a URL é `http://127.0.0.1:7771/p/runner/decision`; essa origem
+também deve constar na lista Allow WebRequest. A execução continua desativada.
+
+As rotas de UI antigas não são mais expostas em portas independentes. Os arquivos
+de páginas dos serviços continuam no código porque fornecem o conteúdo exibido
+pela interface unificada; não foram apagados dados, bundles nem APIs.
+
+O site em `site/` é gerado e fica fora do Git. O estado mutável do MT5 e do
+Runner fica em `/home/ai-agent/lotus-runtime`; os diretórios dos serviços
+apontam para ele por links locais. Dados de backtest e bundles já versionados
+continuam nos diretórios responsáveis.

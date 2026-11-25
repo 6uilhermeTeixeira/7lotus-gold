@@ -1,7 +1,7 @@
 # 4lotus
 
 Leia o README, os contratos em `lotus_app/` e o fluxo do builder antes de editar. O mapa
-compartilhado do workspace está em `../1lotus/docs/repositories.md`.
+compartilhado do workspace está em `../7lotus/docs/repositories.md`.
 
 - Este repositório é a fonte das estratégias promovidas e dos bundles versionados.
 - Não altere bundle publicado sem atualizar versão/hash e validar os consumidores.

@@ -1,0 +1,8 @@
+{
+  "composition_eligible": false,
+  "id": "zigzag-scalper-v3-1",
+  "profile_sha256": "a76ba015cf270b1a1651e75618cc7a5f5e969f898c9f8428b2b57a803c60df18",
+  "review_ref": "docs/reviews/zigzag-scalper-v3-1.md",
+  "source_ref": "6lotus:zigzag-scalper-v3-1 (zigzag_scalper_v7_directional_shadow)",
+  "version": "3.1"
+}

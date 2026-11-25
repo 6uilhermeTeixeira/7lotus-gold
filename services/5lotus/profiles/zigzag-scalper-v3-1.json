@@ -1,0 +1,45 @@
+{
+  "description": "Aplica à V2.1 contexto H1, EMA50 e confirmação estocástica nas vendas tardias.",
+  "execution": {
+    "enabled": false,
+    "mode": "shadow_only"
+  },
+  "family": "zigzag-scalper",
+  "id": "zigzag-scalper-v3-1",
+  "implementation": "6lotus.python-service.app.strategies.zigzag_v7:evaluate",
+  "implementation_profile": "zigzag_scalper_v7_directional_shadow",
+  "name": "ZigZag Scalper V3.1",
+  "parameters": {
+    "base_profile": "zigzag_scalper_v5_adaptive_gate_shadow",
+    "late_sell_previous_stochastic_minimum": 65,
+    "late_sell_start_utc": "12:00",
+    "minimum_completed_candles": 60,
+    "reject_selling_h1_trend": true,
+    "sell_below_ema_period": 50,
+    "symbol": "XAUUSD",
+    "timeframe": "M5"
+  },
+  "promotion_scope": "shadow_catalog_only",
+  "review_ref": "docs/reviews/zigzag-scalper-v3-1.md",
+  "sha256": "1211020a3da45ce287b07a9803400980eefdefceaf8c64083baa0ec5fd4a4229",
+  "source": {
+    "artifact_sha256": "ab85161ae59f141d80d9ff2847227b901fa2b40d8fbf3dce3ee028e1dcbe289d",
+    "files": {
+      "app/indicators.py": "fcdf7e8caa9ba985b5c4650a314ba8d2fd6467c45e2da238f3f236f03cac293b",
+      "app/regime.py": "97d3cd749e0316b7d29cfef6815fa88fb31b486e122c69b2e3972e9ab4a44087",
+      "app/strategies/zigzag_v7.py": "f3cb38953193066049f0d830538a1c8b072d1f97c2951c52e94aa8b44e1d2ab5",
+      "app/strategy.py": "f047b91378ed7113748ccdf38083ef583a6fe9f5cdc2c4a460d9da4eb4273a44"
+    },
+    "legacy_id": "core-zigzag-v7",
+    "source_ref": "6lotus:zigzag-scalper-v3-1"
+  },
+  "subtitle": "Filtro Contextual · Direcional",
+  "validation": {
+    "existing_replay": "6lotus/python-service/data/backtests/core-zigzag-v7-365.json",
+    "independent_replay_complete": false,
+    "note": "Cadastro shadow solicitado pelo operador. O replay independente com sinais, saídas e dimensionamento regenerados continua pendente; não usar este cadastro como autorização operacional.",
+    "replay_supported": false,
+    "status": "provisional_shadow"
+  },
+  "version": "3.1"
+}

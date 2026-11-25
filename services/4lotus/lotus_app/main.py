@@ -25,7 +25,7 @@ RESEARCH_ROOT = Path(os.getenv("LOTUS_RESEARCH_ROOT", Path(__file__).resolve().p
 BACKTEST_ROOT = Path(
     os.getenv(
         "LOTUS_5LOTUS_BACKTEST_ROOT",
-        str(Path(__file__).resolve().parents[2] / "5lotus" / "python-service" / "data" / "backtests"),
+        str(Path(__file__).resolve().parents[2] / "6lotus" / "python-service" / "data" / "backtests"),
     )
 )
 BUNDLE_ROOT = Path(os.getenv("LOTUS_BUNDLE_ROOT", Path(__file__).resolve().parents[1] / "bundles"))

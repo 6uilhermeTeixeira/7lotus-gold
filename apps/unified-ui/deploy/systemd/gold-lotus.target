@@ -1,6 +1,0 @@
-[Unit]
-Description=Gold Lotus unified local interface and internal services
-Wants=lotus-local-1.service lotus-local-2.service lotus-local-3.service lotus-local-4.service lotus-local-5.service gold-lotus-ui.service
-
-[Install]
-WantedBy=default.target

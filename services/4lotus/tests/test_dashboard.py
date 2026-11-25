@@ -49,7 +49,7 @@ def test_strategy_backtest_chart_loads_five_and_seven_year_snapshots(tmp_path, m
         response = client.get(f"/api/strategies/backtest?strategy_id=trigger.g01&days={days}")
         assert response.status_code == 200
         payload = response.json()
-        assert payload["source_project"] == "5lotus"
+        assert payload["source_project"] == "6lotus"
         assert payload["period_days"] == days
         assert payload["equity"]
         assert payload["summary"]["trades_count"] > 0

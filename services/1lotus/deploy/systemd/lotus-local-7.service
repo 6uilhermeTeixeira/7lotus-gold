@@ -1,0 +1,14 @@
+[Unit]
+Description=Gold Lotus 7lotus history and documentation
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ai-agent/projects/7lotus-gold/services/7lotus
+Environment=LOTUS_HOST=127.0.0.1
+ExecStart=/home/ai-agent/projects/7lotus-gold/services/7lotus/.venv/bin/python -m uvicorn history_app:app --uds /run/user/1001/gold-lotus-history.sock
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=gold-lotus.target

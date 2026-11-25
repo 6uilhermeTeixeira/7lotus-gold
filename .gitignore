@@ -36,7 +36,7 @@ dist/
 package/
 coverage/
 .vercel/
-apps/unified-ui/site/
+services/1lotus/site/
 services/4lotus/var/
 
 # Local runtime, account data, databases and logs.
@@ -63,13 +63,13 @@ services/3lotus/logs
 *.ready.csv
 *.part
 *.part.*
-services/5lotus/python-service/data/research/**/*.csv
-services/5lotus/python-service/data/research/**/trades.json
-services/5lotus/python-service/data/research/**/analise-interativa.html
-services/5lotus/market-data-pipeline/data/
-services/5lotus/.artifacts/
-services/5lotus/wine-prefix/
+services/6lotus/python-service/data/research/**/*.csv
+services/6lotus/python-service/data/research/**/trades.json
+services/6lotus/python-service/data/research/**/analise-interativa.html
+services/6lotus/market-data-pipeline/data/
+services/6lotus/.artifacts/
+services/6lotus/wine-prefix/
 
 # Local graph and Supabase CLI outputs.
 **/graphify-out/
-services/5lotus/supabase/.temp/
+services/6lotus/supabase/.temp/

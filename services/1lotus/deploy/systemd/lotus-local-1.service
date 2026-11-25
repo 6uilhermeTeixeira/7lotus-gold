@@ -1,0 +1,15 @@
+[Unit]
+Description=Gold Lotus 1lotus unified interface
+After=lotus-local-2.service lotus-local-3.service lotus-local-4.service lotus-local-5.service lotus-local-6.service lotus-local-7.service
+Wants=lotus-local-2.service lotus-local-3.service lotus-local-4.service lotus-local-5.service lotus-local-6.service lotus-local-7.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ai-agent/projects/7lotus-gold/services/1lotus
+Environment=LOTUS_UI_PORT=7771
+ExecStart=/usr/bin/python3 /home/ai-agent/projects/7lotus-gold/services/1lotus/app.py
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=gold-lotus.target

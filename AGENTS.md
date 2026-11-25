@@ -1,7 +1,7 @@
 # Mapa de trabalho Gold Lotus
 
-Este diretório contém a interface em `apps/unified-ui` e cinco serviços em
-`services/1lotus`–`services/5lotus`. Os históricos Git separados foram removidos;
+Este diretório contém sete serviços em `services/1lotus`–`services/7lotus`.
+Os históricos Git separados foram removidos;
 o repositório conjunto está na raiz. Leia [`docs/CODEX-NAVIGATION-GUIDE.md`](docs/CODEX-NAVIGATION-GUIDE.md)
 e [`docs/PROJECT-MAP.md`](docs/PROJECT-MAP.md) antes de escolher o dono de uma mudança.
 O site institucional fica no repositório irmão `../7lotus-institucional`, fora deste painel.

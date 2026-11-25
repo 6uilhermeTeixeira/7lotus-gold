@@ -1,0 +1,24 @@
+[Unit]
+Description=Resumable Dukascopy XAUUSD tick history download
+After=default.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/ai-agent/projects/7lotus-gold/services/6lotus/market-data-pipeline
+Environment=LOTUS_DATA_ROOT=/home/ai-agent/lotus-data
+Environment=LOTUS_COLLECTION_START=2016-01-01
+Environment=PYTHONPATH=/home/ai-agent/projects/7lotus-gold/services/6lotus/market-data-pipeline/src
+Environment=PATH=/usr/local/bin:/usr/bin
+ExecStart=/usr/bin/python3 -m lotus.ingestion.dukascopy --instrument XAUUSD --start 2016-01-01 --workers 8 --initial-workers 4 --newest-first
+Restart=on-failure
+RestartSec=5min
+TimeoutStartSec=infinity
+TimeoutStopSec=20s
+KillSignal=SIGINT
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ReadWritePaths=/home/ai-agent/lotus-data
+
+[Install]
+WantedBy=default.target
